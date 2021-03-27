@@ -255,7 +255,7 @@
 
 &gmac1 {
 	phy-mode = "rgmii";
-	clock_in_out = "output";
+	clock_in_out = "input";
 
 	snps,reset-gpio = <&gpio0 RK_PC3 GPIO_ACTIVE_LOW>;
 	snps,reset-active-low;
@@ -263,8 +263,7 @@
 	snps,reset-delays-us = <0 20000 100000>;
 
 	assigned-clocks = <&cru SCLK_GMAC1_RX_TX>, <&cru SCLK_GMAC1>;
-	assigned-clock-parents = <&cru SCLK_GMAC1_RGMII_SPEED>;
-	assigned-clock-rates = <0>, <125000000>;
+	assigned-clock-parents = <&gmac1_clkin>, <&gmac1_clkin>;
 
 	pinctrl-names = "default";
 	pinctrl-0 = <&gmac1m0_miim
@@ -746,9 +745,9 @@
 	vccio2-supply = <&vcc_1v8>;
 	vccio3-supply = <&vccio_sd>;
 	vccio4-supply = <&vcca1v8_pmu>;
-	vccio5-supply = <&vcc_1v8>;
+	vccio5-supply = <&vcc_3v3>;
 	vccio6-supply = <&vcc1v8_dvp>;
-	vccio7-supply = <&vcc_1v8>;
+	vccio7-supply = <&vcc_3v3>;
 };
 
 &pwm4 {
@@ -856,6 +855,10 @@
 	status = "okay";
 };
 
+&uart0 {
+	status = "okay";
+};
+
 &uart1 {
 	status = "okay";
 	pinctrl-names = "default";
@@ -893,11 +896,11 @@
 };
 
 &usbdrd_dwc3 {
-//	status = "okay";
+	status = "okay";
 };
 
 &usbdrd30 {
-//	status = "okay";
+	status = "okay";
 };
 
 &usbhost_dwc3 {
