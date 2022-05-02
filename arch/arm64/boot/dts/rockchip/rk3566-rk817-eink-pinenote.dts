@@ -547,11 +547,11 @@
 			compatible = "ti,tps65185";
 			reg = <0x68>;
 			pinctrl-names = "default";
-			pinctrl-0 =		 <&tps65185_gpio>;
-			wakeup-gpios =		 <&gpio3 0x05 0x00>;
-			vcomctl-gpios =		 <&gpio4 0x0a 0x00>;
-			int-gpios =		 <&gpio3 0x06 0x00>;
-			powerup-gpios =		 <&gpio3 0x08 0x00>;
+			pinctrl-0 = <&tps65185_gpio>;
+			wakeup-gpios = <&gpio3 RK_PA5 GPIO_ACTIVE_HIGH>;
+			vcomctl-gpios = <&gpio4 RK_PB2 GPIO_ACTIVE_HIGH>;
+			int-gpios = <&gpio3 0x06 0x00>;
+			powerup-gpios =	<&gpio3 RK_PB0 GPIO_ACTIVE_HIGH>;
 			poweren-gpios =		 <&gpio3 0x09 0x00>;
 		};
 
@@ -559,27 +559,22 @@
 			compatible = "ti,lm3630a";
 			reg = <0x36>;			
 			enable-gpios = <&gpio0 RK_PB7 GPIO_ACTIVE_HIGH>;
-
+			pinctrl-0 = <&backlight_hwen_h>;
+			pinctrl-names = "default";
 			#address-cells = <1>;
 			#size-cells = <0>;
 
+
 			led@0 {
 				reg = <0>;
-				led-sources = <0>;
-				label = "backlight_cold";
-				ti,linear-mapping-mode = <1>;
+				label = "backlight_cool";
 				default-brightness = <0>;
-				max-brightness = <255>;
-
 			};
-			led_warm:pwm@1 {
-				reg = <1>;
-				led-sources = <1>;
-				label = "backlight";
-				ti,linear-mapping-mode = <1>;
 
-				default-brightness = <64>;
-				max-brightness = <255>;
+			led@1 {
+				reg = <1>;
+				label = "backlight_warm";
+				default-brightness = <0>;
 			};
 		};
 
@@ -743,17 +738,25 @@
 				<3 21 RK_FUNC_GPIO &pcfg_pull_none>;
 		};
 	};
-	
-	
+
+	backlight {
+		backlight_hwen_h: backlight-hwen-h {
+			rockchip,pins = <0 RK_PB7 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+	};	
 
 	tps_pmic {
 		tps65185_gpio: tps65185-gpio {
-			rockchip,pins = <
-			    RK_GPIO3 RK_PA4 RK_FUNC_GPIO &pcfg_pull_up
-				RK_GPIO3 RK_PA5 RK_FUNC_GPIO &pcfg_pull_up
-				RK_GPIO3 RK_PA6 RK_FUNC_GPIO &pcfg_pull_up 
-				RK_GPIO3 RK_PB0 RK_FUNC_GPIO &pcfg_pull_up
-				RK_GPIO3 RK_PB1 RK_FUNC_GPIO &pcfg_pull_up>;
+			rockchip,pins = /* wakeup */
+					<3 RK_PA5 RK_FUNC_GPIO &pcfg_pull_none>,
+					/* int */
+					<3 RK_PA6 RK_FUNC_GPIO &pcfg_pull_up>,
+					/* pwr_good */
+					<3 RK_PA7 RK_FUNC_GPIO &pcfg_pull_none>,
+					/* pwrup */
+					<3 RK_PB0 RK_FUNC_GPIO &pcfg_pull_none>,
+					/* vcom_ctrl */
+					<4 RK_PB2 RK_FUNC_GPIO &pcfg_pull_none>;
 		};
 	};
 	
