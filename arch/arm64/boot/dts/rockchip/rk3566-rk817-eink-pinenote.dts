@@ -167,7 +167,7 @@
 	clock-names = "hclk", "dclk";
 	power-domains = <&power RK3568_PD_RGA>;
 	assigned-clocks = <&cru 0x09 &cru 0xfa>;
-	assigned-clock-rates = <250000000 250000000>;
+	assigned-clock-rates = <34000000>, <34000000>;
 	status = "okay";
 };
 
@@ -179,7 +179,7 @@
 	panel,height = <1404>;
 	panel,vir_width = <1872>;
 	panel,vir_height = <1404>;
-	panel,sdck = <33300000>;
+	panel,sdck = <34000000>;
 	panel,lsl = <11>;
 	panel,lbl = <8>;
 	panel,ldl = <234>;
@@ -492,7 +492,7 @@
 			max_input_current = <1500>;
 			max_chrg_current = <2000>;
 			max_chrg_voltage = <4170>;
-			chrg_term_mode = <0>;
+			chrg_term_mode = <1>;
 			chrg_finish_cur = <300>;
 			virtual_power = <0>;
 			dc_det_adc = <0>;
@@ -766,12 +766,12 @@
 
 		soc_slppin_gpio: soc_slppin_gpio {
 			rockchip,pins =
-				<RK_GPIO0 RK_PA2 RK_FUNC_GPIO &pcfg_output_low>;
+				<RK_GPIO0 RK_PA2 RK_FUNC_GPIO &pcfg_output_low_pull_down>;
 		};
 
 		soc_slppin_slp: soc_slppin_slp {
 			rockchip,pins =
-				<RK_GPIO0 RK_PA2 RK_FUNC_1 &pcfg_pull_none>;
+				<RK_GPIO0 RK_PA2 RK_FUNC_1 &pcfg_pull_up>;
 		};
 
 		soc_slppin_rst: soc_slppin_rst {
@@ -899,15 +899,17 @@
 
 	rockchip,regulator-off-in-mem-lite =
 		<&vdd_cpu>, <&vdd_logic>, <&vdd_gpu>, <&vcc_3v3>, <&vdda_0v9>, <&vcc_1v8>,
-		<&vccio_acodec>, <&vccio_sd>, <&vcc1v8_dvp>, <&dcdc_boost>, <&otg_switch>;
+		<&vccio_acodec>, <&vccio_sd>, <&vcc1v8_dvp>, <&dcdc_boost>, <&otg_switch>,
+		<&sleep_sta_ctl>;
 	rockchip,regulator-on-in-mem-lite =
-		<&vcc_ddr>, <&vdda0v9_pmu>, <&vcca1v8_pmu>, <&vcc3v3_pmu>, <&sleep_sta_ctl>;
+		<&vcc_ddr>, <&vdda0v9_pmu>, <&vcca1v8_pmu>, <&vcc3v3_pmu>;
 
 	rockchip,regulator-off-in-mem =
 		<&vdd_cpu>, <&vdd_logic>, <&vdd_gpu>, <&vcc_3v3>, <&vdda_0v9>, <&vcc_1v8>,
-		<&vccio_acodec>, <&vccio_sd>, <&vcc1v8_dvp>, <&dcdc_boost>, <&otg_switch>;
+		<&vccio_acodec>, <&vccio_sd>, <&vcc1v8_dvp>, <&dcdc_boost>, <&otg_switch>,
+		<&sleep_sta_ctl>;
 	rockchip,regulator-on-in-mem =
-		<&vcc_ddr>, <&vdda0v9_pmu>, <&vcca1v8_pmu>, <&vcc3v3_pmu>, <&sleep_sta_ctl>;
+		<&vcc_ddr>, <&vdda0v9_pmu>, <&vcca1v8_pmu>, <&vcc3v3_pmu>;
 
 	rockchip,regulator-off-in-mem-ultra =
 		<&vdd_logic>, <&vdd_gpu>, <&vcc_ddr>, <&vcc_3v3>, <&vdda_0v9>, <&vcc_1v8>,
@@ -926,7 +928,6 @@
 	supports-emmc;
 	non-removable;
 	keep-power-in-suspend;
-	rockchip,txclk-tapnum = <0x8>;
 	max-frequency = <200000000>;
 	status = "okay";
 };
